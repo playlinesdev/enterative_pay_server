@@ -4,10 +4,15 @@ import { Transaction } from '../entities/transaction';
 @Controller('transaction')
 export class TransactionController {
   @Post()
-  createTransaction(): Promise<Transaction> {
+  createTransaction(): Promise<Transaction[]> {
     return new Promise((res, rej) => {
-      res(null);
+      res([]);
     });
+  }
+
+  @Get('one')
+  fineOneTransaction(): Promise<Transaction> {
+    return new Promise((res, rej) => res(null));
   }
 
   @Get()
