@@ -1,8 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { Transaction } from '../entities/transaction';
 
 @Controller('transaction')
 export class TransactionController {
+  @Post()
+  createTransaction(): Promise<Transaction> {
+    return new Promise((res, rej) => {
+      res(null);
+    });
+  }
+
   @Get()
   listTransaction(): Promise<Transaction[]> {
     return new Promise((res, rej) => {
