@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TransactionEntity } from './entities/transaction.entity';
-import { TransactionService } from './service/transaction.service';
-import { TransactionController } from './transaction.controller';
+import { TransactionEntity } from '../src/transaction/entities/transaction.entity';
+import { TransactionService } from '../src/transaction/service/transaction.service';
+import { TransactionController } from '../src/transaction/controller/transaction.controller';
 
 describe('TransactionController', () => {
   let controller: TransactionController;

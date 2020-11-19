@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { TransactionService } from './service/transaction.service';
+import { TransactionService } from '../service/transaction.service';
 
 @Controller('transaction')
 export class TransactionController {

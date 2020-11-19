@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
+import { AppController } from './controller/app.controller';
 import { AppService } from './app.service';
 import { TransactionEntity } from './transaction/entities/transaction.entity';
 import { TransactionModule } from './transaction/transaction.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -17,7 +18,7 @@ import { TransactionModule } from './transaction/transaction.module';
     database: 'enterative_pay',
     username: 'root',
     password: 'root'
-  }), TransactionModule],
+  }), TransactionModule, UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
