@@ -24,7 +24,7 @@ export class TransactionController {
     @Post()
     createOne(@Body() body: { client: String, amount: number }) {
         return new Promise((res, rej) => {
-            this.transactionService.createPurchase(body.client, body.amount);
+            res(this.transactionService.createPurchase(body.client, body.amount));
         });
     }
 
