@@ -22,9 +22,12 @@ export class TransactionController {
     }
 
     @Post()
-    createOne(@Body() body: { client: String, amount: number }) {
-        return new Promise((res, rej) => {
-            res(this.transactionService.createPurchase(body.client, body.amount));
+    createOne(@Body() body: { client: String, amount: number, description?: String }) {
+        return new Promise(async (res, rej) => {
+            var r = await this.transactionService.createPurchase(body.client, body.amount, body.description).catch((err) => {
+                rej(err);
+            });
+            res(r)
         });
     }
 

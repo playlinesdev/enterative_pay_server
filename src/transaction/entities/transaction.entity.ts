@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity("transaction")
 export class TransactionEntity {
@@ -8,10 +8,22 @@ export class TransactionEntity {
     referenceId: String
     @Column()
     transactionId?: String
-    @Column({ type: 'decimal' })
+    @Column({ type: 'decimal', precision: 2 })
     amount: number
     @Column({ type: 'int' })
     status: number
     @Column()
     client: String
+    @Column({ length: 1024 })
+    qrCode?: String
+    @Column()
+    description: String
+    @Column()
+    payment_pix_provider: String
+    @Column()
+    payment_pix_key: String
+    @CreateDateColumn()
+    payment_pix_expirationDateTime: Date
+
+
 }
