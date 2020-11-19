@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "command": "npm start",
+            "name": "Run npm start",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "command": "npm test",
+            "name": "Testes unitários",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "Debug Nest Framework",
@@ -23,32 +35,6 @@
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
             "protocol": "inspector"
-        },
-        {
-            "type": "node",
-            "name": "vscode-jest-tests",
-            "request": "launch",
-            "args": [
-                "--runInBand"
-            ],
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}\\start",
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
         }
     ]
 }
