@@ -5,7 +5,6 @@ import { AuthService } from './auth/auth.service';
 import { jwtConstants } from './auth/constants';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/local-auth.guard';
-import { UserEntity } from './users/entities/user.entity';
 
 @Controller()
 export class AppController {
@@ -16,12 +15,12 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
-    return this.authService.login(req.user)
+    return this.authService.login({ ...req.user })
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  async getProfile(@Request() req) {
-    return req.user;
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Get('profile')
+  // async getProfile(@Request() req) {
+  //   return req.user;
+  // }
 }

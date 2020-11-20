@@ -3,6 +3,7 @@ import { UsersService } from 'src/users/service/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt'
 import { authConstants } from './auth-constants';
+import { jwtConstants } from './constants';
 @Injectable()
 export class AuthService {
     constructor(
@@ -27,7 +28,13 @@ export class AuthService {
 
     async login(user: any) {
         const payload = { username: user.username, sub: user.userId }
+        var serverTime = new Date()
+        var expireServerTime: Date = Object.assign(serverTime)
+        expireServerTime.setSeconds(expireServerTime.getSeconds() + jwtConstants.expiresIn)
         return {
+            serverTime: serverTime,
+            expireServerTime: expireServerTime,
+            expiresInSeconds: jwtConstants.expiresIn,
             access_token: this.jwtService.sign(payload),
         }
     }
