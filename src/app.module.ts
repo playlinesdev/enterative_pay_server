@@ -5,7 +5,6 @@ import { TransactionEntity } from './transaction/entities/transaction.entity';
 import { TransactionModule } from './transaction/transaction.module';
 import { UsersModule } from './users/users.module';
 import { UserEntity } from './users/entities/user.entity';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 
