@@ -11,6 +11,12 @@
             "type": "node-terminal"
         },
         {
+            "command": "yarn start:dev",
+            "name": "Nest Watch",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
             "command": "npm test",
             "name": "Testes unitários",
             "request": "launch",
