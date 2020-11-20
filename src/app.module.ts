@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TransactionEntity } from './transaction/entities/transaction.entity';
 import { TransactionModule } from './transaction/transaction.module';
@@ -8,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { UserEntity } from './users/entities/user.entity';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -23,6 +23,6 @@ import { AuthModule } from './auth/auth.module';
     password: 'root'
   }), TransactionModule, UsersModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService],
 })
 export class AppModule { }
