@@ -16,8 +16,12 @@ export class AuthService {
         return await bcrypt.hash(password, salt)
     }
 
+    //sdfasdfasdf
     async validateUser(username: String, password: String) {
+        let abc = ''
         var user = await this.usersService.findOne(username)
+        if (!user)
+            return null
         var passEquals = await bcrypt.compare(password, user.password.toString())
         if (user && passEquals) {
             const { password, ...result } = user
@@ -26,11 +30,16 @@ export class AuthService {
         return null
     }
 
+    //asdfas
     async login(user: any) {
         const payload = { username: user.username, sub: user.userId }
         var serverTime = new Date()
-        var expireServerTime: Date = Object.assign(serverTime)
+        console.log(serverTime)
+        var expireServerTime: Date
+        Object.assign(expireServerTime, serverTime)
+        console.log(serverTime)
         expireServerTime.setSeconds(expireServerTime.getSeconds() + jwtConstants.expiresIn)
+        console.log(serverTime)
         return {
             serverTime: serverTime,
             expireServerTime: expireServerTime,

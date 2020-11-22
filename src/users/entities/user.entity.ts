@@ -6,6 +6,10 @@ export class UserEntity {
     userId?: number
     @Column({ unique: true })
     username: String
-    @Column({})
+    @Column()
     password: String
+    @Column({ unique: true })
+    email: String
+    @Column()
+    name: String
 }
