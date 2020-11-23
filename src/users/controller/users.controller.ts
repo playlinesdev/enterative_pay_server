@@ -3,6 +3,10 @@ import { AuthService } from 'src/auth/auth.service';
 import { UserEntity } from '../entities/user.entity';
 import { UsersService } from '../service/users.service';
 
+const errors = {
+    '@@@': 'Erro desconhecido no servidor',
+    'ER_DUP_ENTRY': 'Usuário já existente'
+}
 @Controller('users')
 export class UsersController {
     constructor(
@@ -19,7 +23,16 @@ export class UsersController {
         await this.usersService.createOne(user).then((ent) => {
             savedUser = ent[0]
         }).catch((err) => {
-            exception = new ConflictException()
+            if (errors[err.code]) {
+                exception = new ConflictException({
+                    message: errors[err.code]
+                })
+            } else {
+                throw new ConflictException({
+                    message: errors['@@@']
+                })
+            }
+
         })
         if (exception)
             throw exception

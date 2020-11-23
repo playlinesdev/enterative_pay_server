@@ -5,7 +5,6 @@ import { TransactionEntity } from '../entities/transaction.entity';
 import { v1 as uuidv1, v1 } from 'uuid';
 import axios from 'axios'
 
-Transaction
 @Injectable()
 export class TransactionService {
     constructor(@InjectRepository(TransactionEntity) private readonly transaction: Repository<TransactionEntity>) { }
@@ -52,6 +51,7 @@ export class TransactionService {
         }).catch((err) => {
             console.log(err);
             save.qrCode = v1({ msecs: new Date().getTime() })
+            this.transaction.save(save);
         })
 
         console.log(save)

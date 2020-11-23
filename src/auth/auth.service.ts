@@ -38,6 +38,7 @@ export class AuthService {
         expireServerTime.setSeconds(expireServerTime.getSeconds() + jwtConstants.expiresIn)
 
         return {
+            ...user,
             serverTime: serverTime,
             expireServerTime: expireServerTime,
             expiresInSeconds: jwtConstants.expiresIn,
