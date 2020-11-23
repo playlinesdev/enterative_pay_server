@@ -34,12 +34,9 @@ export class AuthService {
     async login(user: any) {
         const payload = { username: user.username, sub: user.userId }
         var serverTime = new Date()
-        console.log(serverTime)
-        var expireServerTime: Date
-        Object.assign(expireServerTime, serverTime)
-        console.log(serverTime)
+        var expireServerTime: Date = new Date()
         expireServerTime.setSeconds(expireServerTime.getSeconds() + jwtConstants.expiresIn)
-        console.log(serverTime)
+
         return {
             serverTime: serverTime,
             expireServerTime: expireServerTime,

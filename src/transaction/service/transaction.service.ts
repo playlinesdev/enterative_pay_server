@@ -29,7 +29,7 @@ export class TransactionService {
             payment_pix_expirationDateTime: new Date(),
             payment_pix_key: 'RANDOM_KEY',
             payment_pix_provider: 'C6BANK',
-
+            date_purchase: new Date()
         }
         var save = await this.transaction.save(t)
 

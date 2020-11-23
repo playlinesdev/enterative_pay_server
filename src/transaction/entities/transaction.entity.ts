@@ -24,6 +24,6 @@ export class TransactionEntity {
     payment_pix_key: String
     @CreateDateColumn()
     payment_pix_expirationDateTime: Date
-
-
+    @CreateDateColumn({ nullable: false })
+    date_purchase: Date
 }
