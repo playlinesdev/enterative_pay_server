@@ -41,7 +41,7 @@ export class TransactionService {
                 "pix": {
                     "provider": save.payment_pix_provider,
                     "key": [save.payment_pix_key],
-                    "expirationDateTime": save.payment_pix_expirationDateTime.toString()
+                    "expirationDateTime": save.payment_pix_expirationDateTime.toISOString()
                 }
             }
         }, {
