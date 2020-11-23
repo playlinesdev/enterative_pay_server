@@ -24,7 +24,7 @@ export class TransactionService {
             client: client,
             status: 0,
             referenceId: v1({ msecs: new Date().getTime() }),
-            description: description,
+            description: description ?? 'Crédito Enterative Pay',
             payment_pix_expirationDateTime: new Date(),
             payment_pix_key: 'RANDOM_KEY',
             payment_pix_provider: 'C6BANK',
