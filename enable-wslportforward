@@ -1,0 +1,5 @@
+innetsh interface portproxy add v4tov4 listenport=3443 listenaddress=0.0.0.0 connectport=3443 connectaddress=172.26.235.135
+
+Don't forget to allow port on firewall
+
+WSL2 needs this trick to forward port
