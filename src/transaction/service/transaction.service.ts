@@ -9,14 +9,53 @@ import axios from 'axios'
 export class TransactionService {
     constructor(@InjectRepository(TransactionEntity) private readonly transaction: Repository<TransactionEntity>) { }
     findById(id: string) {
-        return this.transaction.find({ where: { id: id } })
+        return this.transaction.find({ where: { referenceId: id } })
     }
-    findByReference(referenceId: String) {
-        return this.transaction.findOne({ where: { referenceId: referenceId } })
+    /**
+     * Updates a transaction on internal database based on paygo transaction instance
+     */
+    async updateTransactionByReference(referenceId: String) {
+        var dbTransaction = await this.transaction.findOne({ where: { referenceId: referenceId } })
+        var payGoTransaction = await this.readPaygoTransaction(referenceId);
+        if (payGoTransaction && this.dbTransactionDifferFromPaygo(dbTransaction, payGoTransaction)) {
+            dbTransaction = this.updateDbTransctionWithPaygo(dbTransaction, payGoTransaction)
+            return this.transaction.save(dbTransaction);
+        }
+        return false
     }
+    updateDbTransctionWithPaygo(db: TransactionEntity, paygo) {
+        db.status = paygo.status
+        db.date_purchase = paygo.dtTransaction
+        db.amount = paygo.amount
+        db.transactionId = paygo.transactionId
+        return db
+    }
+
+    dbTransactionDifferFromPaygo(db: TransactionEntity, paygo) {
+        return db.status != paygo.status ||
+            db.transactionId != paygo.transactionId ||
+            db.date_purchase != paygo.dtTransaction ||
+            db.amount != paygo.amout
+    }
+
     findAll(query: { client?: String, referenceId?: String, id?: number, transactionId?: String, qrCode?: String, status?: Number }) {
         return this.transaction.find({ where: query })
     }
+
+    async readPaygoTransaction(transactionId: String) {
+        try {
+            var response = await axios.get('https://apidemo.gate2all.com.br/v1/transactions/' + transactionId, {
+                headers: {
+                    "authenticationApi": "chart.claudio",
+                    "authenticationKey": "FD1C186AA04684FC6966"
+                }
+            })
+            return response.data
+        } catch (error) {
+            throw error
+        }
+    }
+
     async createPurchase(client: String, amount: number, description: String = '') {
         //creates it on internal database
         var t: TransactionEntity = {
@@ -36,6 +75,7 @@ export class TransactionService {
             "referenceId": save.referenceId,
             "amount": save.amount,
             "description": save.description,
+            "postBackUrl": "http://179.34.37.251:3000/transaction/updateFromPayGo",
             "payment": {
                 "pix": {
                     "provider": save.payment_pix_provider,
@@ -45,8 +85,8 @@ export class TransactionService {
             }
         }, {
             headers: {
-                "authenticationApi": "demo",
-                "authenticationKey": "A420C95AF486F0E64437"
+                "authenticationApi": "chart.claudio",
+                "authenticationKey": "FD1C186AA04684FC6966"
             }
         }).catch((err) => {
             console.log(err);
@@ -54,6 +94,7 @@ export class TransactionService {
             this.transaction.save(save);
         })
 
+        console.log(payGoResponse)
         console.log(save)
         return save
     }
