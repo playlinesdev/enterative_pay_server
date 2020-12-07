@@ -22,7 +22,7 @@ export class TransactionController {
     @UseGuards(JwtAuthGuard)
     @Put('/reference/:id')
     getByReference(@Param('id') referenceId: String) {
-        return this.transactionService.updateTransactionByReference(referenceId);
+        return this.transactionService.updateTransactionByReference({ referenceId: referenceId });
     }
 
     @UseGuards(JwtAuthGuard)

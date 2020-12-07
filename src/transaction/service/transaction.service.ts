@@ -14,9 +14,10 @@ export class TransactionService {
     /**
      * Updates a transaction on internal database based on paygo transaction instance
      */
-    async updateTransactionByReference(referenceId: String) {
-        var dbTransaction = await this.transaction.findOne({ where: { referenceId: referenceId } })
-        var payGoTransaction = await this.readPaygoTransaction(referenceId);
+    async updateTransactionByReference(data: { referenceId?: String, dbTransaction?: TransactionEntity, paygoTransaction?: any }) {
+        var { referenceId, dbTransaction, paygoTransaction } = data
+        var dbTransaction = dbTransaction ?? await this.transaction.findOne({ where: { referenceId: referenceId } })
+        var payGoTransaction = paygoTransaction ?? await this.readPaygoTransaction(dbTransaction.referenceId);
         if (payGoTransaction && this.dbTransactionDifferFromPaygo(dbTransaction, payGoTransaction)) {
             dbTransaction = this.updateDbTransctionWithPaygo(dbTransaction, payGoTransaction)
             return this.transaction.save(dbTransaction);
@@ -71,7 +72,7 @@ export class TransactionService {
         }
         var save = await this.transaction.save(t)
 
-        var payGoResponse = await axios.post('https://apidemo.gate2all.com.br/v1/transactions/', {
+        var payGoResponse: any = await axios.post('https://apidemo.gate2all.com.br/v1/transactions/', {
             "referenceId": save.referenceId,
             "amount": save.amount,
             "description": save.description,
@@ -94,6 +95,7 @@ export class TransactionService {
             this.transaction.save(save);
         })
 
+        this.updateTransactionByReference({ dbTransaction: save, paygoTransaction: payGoResponse.data })
         console.log(payGoResponse)
         console.log(save)
         return save
