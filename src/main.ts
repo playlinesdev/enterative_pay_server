@@ -20,8 +20,8 @@ async function bootstrap() {
   );
   await app.init();
 
-  http.createServer(server).listen(3000);
-  https.createServer(httpsOptions, server).listen(3443,);
+  http.createServer(server).listen(8080);
+  // https.createServer(httpsOptions, server).listen(3443,);
 }
 
 bootstrap()

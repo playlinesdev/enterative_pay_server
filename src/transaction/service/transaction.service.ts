@@ -14,11 +14,12 @@ export class TransactionService {
     /**
      * Updates a transaction on internal database based on paygo transaction instance
      */
-    async updateTransactionByReference(referenceId: String) {
-        var dbTransaction = await this.transaction.findOne({ where: { referenceId: referenceId } })
-        var payGoTransaction = await this.readPaygoTransaction(referenceId);
-        if (payGoTransaction && this.dbTransactionDifferFromPaygo(dbTransaction, payGoTransaction)) {
-            dbTransaction = this.updateDbTransctionWithPaygo(dbTransaction, payGoTransaction)
+    async updateTransactionByReference(data: { referenceId?: String, dbTransaction?: TransactionEntity, paygoTransaction?: any }) {
+        var { referenceId, dbTransaction, paygoTransaction } = data
+        var db = dbTransaction ?? await this.transaction.findOne({ where: { referenceId: referenceId } })
+        var paygo = paygoTransaction ?? await this.readPaygoTransaction(db.referenceId);
+        if (paygo && this.dbTransactionDifferFromPaygo(dbTransaction, paygo)) {
+            dbTransaction = this.updateDbTransctionWithPaygo(dbTransaction, paygo)
             return this.transaction.save(dbTransaction);
         }
         return false
@@ -75,7 +76,7 @@ export class TransactionService {
             "referenceId": save.referenceId,
             "amount": save.amount,
             "description": save.description,
-            "postBackUrl": "http://179.34.37.251:3000/transaction/updateFromPayGo",
+            "postBackUrl": "http://179.34.37.251:8080/transaction/updateFromPayGo",
             "payment": {
                 "pix": {
                     "provider": save.payment_pix_provider,
@@ -94,8 +95,7 @@ export class TransactionService {
             this.transaction.save(save);
         })
 
-        console.log(payGoResponse)
-        console.log(save)
+        this.updateTransactionByReference({ dbTransaction: save, paygoTransaction: payGoResponse })
         return save
     }
 }
