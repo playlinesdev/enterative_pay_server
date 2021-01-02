@@ -82,7 +82,7 @@ export class TransactionService {
             "referenceId": save.referenceId,
             "amount": save.amount,
             "description": save.description,
-            "postBackUrl": "http://179.34.37.251:3000/transaction/updateFromPayGo",
+            "postBackUrl": "http://179.34.37.251:8080/transaction/updateFromPayGo",
             "payment": {
                 "pix": {
                     "provider": save.payment_pix_provider,

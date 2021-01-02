@@ -31,10 +31,12 @@ export class TransactionController {
         return this.transactionService.findAll(query);
     }
 
-    @Post('updateFromPayGo')
+    @Get('updateFromPayGo')
     updateFromPayGo(@Body() payGoData: any) {
+        var notification: { transactionId?: String, referenceId?: String, error?: String } = payGoData;
+
         console.log('Update chegando da PayGo')
-        console.log(payGoData)
+        console.log(notification)
         return 'ok'
     }
 
