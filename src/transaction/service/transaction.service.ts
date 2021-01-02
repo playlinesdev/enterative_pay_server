@@ -8,18 +8,23 @@ import axios from 'axios'
 @Injectable()
 export class TransactionService {
     constructor(@InjectRepository(TransactionEntity) private readonly transaction: Repository<TransactionEntity>) { }
-    findById(id: string) {
-        return this.transaction.find({ where: { referenceId: id } })
+    async findById(id: string) {
+        var trans = await this.transaction.findOne({ where: { referenceId: id } })
+        var paygoTrans = await this.readPaygoTransaction(trans.transactionId);
+        if (trans && (!trans.qrCode || trans.status != 6)) {
+            return await this.updateTransactionByReference({ dbTransaction: trans, paygoTransaction: paygoTrans });
+        }
+        return trans
     }
     /**
      * Updates a transaction on internal database based on paygo transaction instance
      */
     async updateTransactionByReference(data: { referenceId?: String, dbTransaction?: TransactionEntity, paygoTransaction?: any }) {
         var { referenceId, dbTransaction, paygoTransaction } = data
-        var db = dbTransaction ?? await this.transaction.findOne({ where: { referenceId: referenceId } })
-        var paygo = paygoTransaction ?? await this.readPaygoTransaction(db.referenceId);
-        if (paygo && this.dbTransactionDifferFromPaygo(dbTransaction, paygo)) {
-            dbTransaction = this.updateDbTransctionWithPaygo(dbTransaction, paygo)
+        var dbTransaction = dbTransaction ?? await this.transaction.findOne({ where: { referenceId: referenceId } })
+        var payGoTransaction = paygoTransaction ?? await this.readPaygoTransaction(dbTransaction.referenceId);
+        if (payGoTransaction && this.dbTransactionDifferFromPaygo(dbTransaction, payGoTransaction)) {
+            dbTransaction = this.updateDbTransctionWithPaygo(dbTransaction, payGoTransaction)
             return this.transaction.save(dbTransaction);
         }
         return false
@@ -28,6 +33,7 @@ export class TransactionService {
         db.status = paygo.status
         db.date_purchase = paygo.dtTransaction
         db.amount = paygo.amount
+        db.qrCode = paygo.payment.pix.qrCode
         db.transactionId = paygo.transactionId
         return db
     }
@@ -72,7 +78,7 @@ export class TransactionService {
         }
         var save = await this.transaction.save(t)
 
-        var payGoResponse = await axios.post('https://apidemo.gate2all.com.br/v1/transactions/', {
+        var payGoResponse: any = await axios.post('https://apidemo.gate2all.com.br/v1/transactions/', {
             "referenceId": save.referenceId,
             "amount": save.amount,
             "description": save.description,
@@ -95,7 +101,9 @@ export class TransactionService {
             this.transaction.save(save);
         })
 
-        this.updateTransactionByReference({ dbTransaction: save, paygoTransaction: payGoResponse })
+        this.updateTransactionByReference({ dbTransaction: save, paygoTransaction: payGoResponse.data })
+        console.log(payGoResponse)
+        console.log(save)
         return save
     }
 }

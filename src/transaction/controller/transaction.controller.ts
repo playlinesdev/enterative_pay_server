@@ -12,7 +12,7 @@ export class TransactionController {
      */
     @UseGuards(JwtAuthGuard)
     @Get('/reference/:referenceId')
-    getOne(@Param('referenceId') id: string) {
+    async getOne(@Param('referenceId') id: string) {
         return this.transactionService.findById(id);
     }
 
