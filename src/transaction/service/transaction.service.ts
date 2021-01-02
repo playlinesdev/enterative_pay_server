@@ -8,8 +8,13 @@ import axios from 'axios'
 @Injectable()
 export class TransactionService {
     constructor(@InjectRepository(TransactionEntity) private readonly transaction: Repository<TransactionEntity>) { }
-    findById(id: string) {
-        return this.transaction.find({ where: { referenceId: id } })
+    async findById(id: string) {
+        var trans = await this.transaction.findOne({ where: { referenceId: id } })
+        var paygoTrans = await this.readPaygoTransaction(trans.transactionId);
+        if (trans && (!trans.qrCode || trans.status != 6)) {
+            return await this.updateTransactionByReference({ dbTransaction: trans, paygoTransaction: paygoTrans });
+        }
+        return trans
     }
     /**
      * Updates a transaction on internal database based on paygo transaction instance
@@ -28,6 +33,7 @@ export class TransactionService {
         db.status = paygo.status
         db.date_purchase = paygo.dtTransaction
         db.amount = paygo.amount
+        db.qrCode = paygo.payment.pix.qrCode
         db.transactionId = paygo.transactionId
         return db
     }

@@ -11,7 +11,7 @@
             "type": "node-terminal"
         },
         {
-            "command": "JWT_SECRET=1234 EXPIRES_IN=300 yarn start:dev",
+            "command": "yarn start:dev",
             "name": "Nest Watch",
             "request": "launch",
             "type": "node-terminal"
