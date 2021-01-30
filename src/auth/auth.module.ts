@@ -11,7 +11,6 @@ import { JwtStrategy } from './jwt.strategy';
 import { LocalAuthGuard } from './local-auth.guard';
 import { LocalStrategy } from './local.strategy';
 
-console.log(jwtConstants)
 @Module({
     imports: [
         UsersModule,

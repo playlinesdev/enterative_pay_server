@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/service/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt'
-import { authConstants } from './auth-constants';
 import { jwtConstants } from './constants';
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -16,9 +16,7 @@ export class AuthService {
         return await bcrypt.hash(password, salt)
     }
 
-    //sdfasdfasdf
     async validateUser(username: String, password: String) {
-        let abc = ''
         var user = await this.usersService.findOne(username)
         if (!user)
             return null
@@ -30,7 +28,6 @@ export class AuthService {
         return null
     }
 
-    //asdfas
     async login(user: any) {
         const payload = { username: user.username, sub: user.userId }
         var serverTime = new Date()
