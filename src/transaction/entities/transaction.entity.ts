@@ -14,15 +14,15 @@ export class TransactionEntity {
     status: number
     @Column()
     client: String
-    @Column({ length: 1024 })
+    @Column({ length: 1024, default: '' })
     qrCode?: String
-    @Column()
+    @Column({ default: '' })
     description: String
-    @Column()
+    @Column({ default: '' })
     payment_pix_provider: String
-    @Column()
+    @Column({ default: '' })
     payment_pix_key: String
-    @CreateDateColumn()
+    @CreateDateColumn({ nullable: true })
     payment_pix_expirationDateTime: Date
     @CreateDateColumn({ nullable: false })
     date_purchase: Date
