@@ -6,7 +6,7 @@ export class TransactionEntity {
     id?: number
     @Column()
     referenceId: String
-    @Column({ default: '' })
+    @Column({ default: '', nullable: true })
     transactionId?: String
     @Column({ type: 'decimal', scale: 2, precision: 11 })
     amount: number
