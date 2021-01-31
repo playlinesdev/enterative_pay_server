@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { TransactionService } from '../service/transaction.service';
 
@@ -33,10 +33,10 @@ export class TransactionController {
 
     @Get('updateFromPayGo')
     updateFromPayGo(@Body() payGoData: any) {
+        Logger.log('Update chegando da PayGo')
         var notification: { transactionId?: String, referenceId?: String, error?: String } = payGoData;
 
-        console.log('Update chegando da PayGo')
-        console.log(notification)
+        Logger.log(notification)
         return 'ok'
     }
 
