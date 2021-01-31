@@ -10,7 +10,9 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
+  imports: [ConfigModule.forRoot({
+    envFilePath: '.env', isGlobal: true
+  }), TypeOrmModule.forRoot({
     type: 'mysql',
     host: process.env.MYSQL_HOST ?? '127.0.0.1',
     port: process.env.MYSQL_PORT ? Number(process.env.MYSQL_PORT) : 3306,
@@ -21,8 +23,6 @@ import { ConfigModule } from '@nestjs/config';
     database: process.env.MYSQL_DATABASE ?? 'enterative_pay',
     username: process.env.MYSQL_USER ?? 'root',
     password: process.env.MYSQL_PASSWORD ?? 'root',
-  }), ConfigModule.forRoot({
-    envFilePath: '.env', isGlobal: true
   }), TransactionModule, UsersModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
